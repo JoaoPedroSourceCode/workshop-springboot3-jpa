@@ -1,13 +1,25 @@
 package com.example.project.entities;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GenerationType;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+
+@Entity
+@Table (name = "tb_user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String phone;
     private String password;
@@ -15,18 +27,18 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Integer id, String name, String phone, String password) {
+    public User(Long id, String name, String phone, String password) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.password = password;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
