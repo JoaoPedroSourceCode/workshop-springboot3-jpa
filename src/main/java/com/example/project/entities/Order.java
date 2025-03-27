@@ -1,5 +1,6 @@
 package com.example.project.entities;
 
+import com.example.project.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,11 +20,12 @@ public class Order implements Serializable {
 
     private static final long SerialVersionUID = 1L;
 
+    private Integer orderStatus;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Instant instant;
-
 
     @ManyToOne
     private User client;
@@ -31,9 +33,10 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(Long id, Instant instant, User client) {
+    public Order(Long id, Instant instant, OrderStatus orderStatus, User client) {
         this.id = id;
         this.instant = instant;
+        setOrderStatus(orderStatus);
         this.client = client;
     }
 
@@ -56,6 +59,16 @@ public class Order implements Serializable {
 
     public User getClient() {
         return client;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return OrderStatus.valueOf(orderStatus);
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        if (orderStatus != null) {
+            this.orderStatus = orderStatus.getCode();
+        }
     }
 
     public void setClient(User client) {
