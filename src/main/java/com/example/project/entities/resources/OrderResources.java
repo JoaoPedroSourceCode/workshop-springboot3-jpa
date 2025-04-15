@@ -1,8 +1,6 @@
 package com.example.project.entities.resources;
 
-
-
-import com.example.project.entities.Order;
+import com.example.project.dtos.OrderDTO;
 import com.example.project.services.OrderServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +19,14 @@ public class OrderResources {
     private OrderServices orderServices;
 
     @GetMapping
-    public ResponseEntity<List<Order>> findAll() {
-        List <Order> orders = orderServices.findAll();
-
-        return ResponseEntity.ok().body(orders);
+    public ResponseEntity<List<OrderDTO>> findAll() {
+        List<OrderDTO> ordersDTO = orderServices.findAll();
+        return ResponseEntity.ok().body(ordersDTO);
     }
 
-    @GetMapping (value = "/{id}")
-    public ResponseEntity<Order> findById (@PathVariable long id) {
-        Order order = orderServices.findById(id);
-
-        return ResponseEntity.ok().body(order);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<OrderDTO> findById(@PathVariable Long id) {
+        OrderDTO orderDTO = orderServices.getOrderDTO(id);
+        return ResponseEntity.ok().body(orderDTO);
     }
 }

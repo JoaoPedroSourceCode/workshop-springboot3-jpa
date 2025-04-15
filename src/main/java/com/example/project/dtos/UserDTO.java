@@ -1,49 +1,31 @@
-package com.example.project.entities;
-
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+package com.example.project.dtos;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+public class UserDTO implements Serializable {
 
-@Entity
-@Table (name = "tb_user")
-public class User implements Serializable {
+    public static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
     private String phone;
     private String password;
+    private List<OrderDTO> orderDTOlist;
 
-
-
-    @OneToMany(mappedBy = "client")
-    private List<Order> orders;
-
-    public User() {
+    public UserDTO() {
     }
 
-    public User(Long id, String name, String email, String phone, String password) {
+    public UserDTO(Long id, String password, String email, String name, String phone, List<OrderDTO> orderDTOlist) {
         this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
         this.password = password;
+        this.email = email;
+        this.name = name;
+        this.phone = phone;
+        this.orderDTOlist = orderDTOlist;
     }
-
 
     public Long getId() {
         return id;
@@ -85,25 +67,19 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public void setOrderDTOList(List<OrderDTO> orderDTOlist) {
+        this.orderDTOlist = orderDTOlist;
     }
 
-    public void addOrder (Order order) {
-        orders.add(order);
-
-    }
-
-    public void removeOrder (Order order) {
-        orders.remove(order);
-
+    public List<OrderDTO> getOrderDTOlist() {
+        return orderDTOlist;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(id, userDTO.id);
     }
 
     @Override
