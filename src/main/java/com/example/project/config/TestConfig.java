@@ -1,11 +1,7 @@
 package com.example.project.config;
 
+import com.example.project.entities.*;
 import com.example.project.entities.enums.OrderStatus;
-import com.example.project.entities.Product;
-import com.example.project.entities.User;
-import com.example.project.entities.Category;
-import com.example.project.entities.OrderItem;
-import com.example.project.entities.Order;
 import com.example.project.repositories.CategoryRepository;
 import com.example.project.repositories.OrderRepository;
 import com.example.project.repositories.ProductRepository;
@@ -81,5 +77,9 @@ public class TestConfig implements CommandLineRunner {
 
         orderItemRepository.saveAll (Arrays.asList(oi1, oi2, oi3, oi4));
 
+        Payment payment1 = new Payment(null,Instant.parse("2019-06-20T21:53:07Z"),o1);
+        o1.setPayment(payment1);
+
+        orderRepository.save(o1);
     }
 }
