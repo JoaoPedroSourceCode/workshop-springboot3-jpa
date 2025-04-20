@@ -1,24 +1,32 @@
 package com.example.project.dtos;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 import java.util.Objects;
 
+@JsonPropertyOrder({
+        "id",
+        "instant",
+        "orderStatus",
+        "user",
+        "item"
+})
 public class OrderDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
     private Instant instant;
     private String orderStatus;
-    // Campo para armazenar os items da order
-    private List<OrderItemDTO> items;
+    private UserDTO userDTO;
+    private Set<OrderItemDTO> items;
 
     public OrderDTO() {
     }
 
-    // Construtor com parâmetros pode ser criado se necessário
-    public OrderDTO(Long id, Instant instant, String orderStatus, List<OrderItemDTO> items) {
+    public OrderDTO(Long id, Instant instant, String orderStatus, Set<OrderItemDTO> items) {
         this.id = id;
         this.instant = instant;
         this.orderStatus = orderStatus;
@@ -49,11 +57,19 @@ public class OrderDTO implements Serializable {
         this.orderStatus = orderStatus;
     }
 
-    public List<OrderItemDTO> getItems() {
+    public UserDTO getUser() {
+        return userDTO;
+    }
+
+    public void setUserDTO(UserDTO user) {
+        this.userDTO = user;
+    }
+
+    public Set<OrderItemDTO> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItemDTO> items) {
+    public void setItems(Set<OrderItemDTO> items) {
         this.items = items;
     }
 

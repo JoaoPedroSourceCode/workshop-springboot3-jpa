@@ -13,18 +13,17 @@ public class UserDTO implements Serializable {
     private String email;
     private String phone;
     private String password;
-    private List<OrderDTO> orderDTOlist;
+
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String password, String email, String name, String phone, List<OrderDTO> orderDTOlist) {
+    public UserDTO(Long id, String password, String email, String name, String phone) {
         this.id = id;
         this.password = password;
         this.email = email;
         this.name = name;
         this.phone = phone;
-        this.orderDTOlist = orderDTOlist;
     }
 
     public Long getId() {
@@ -65,14 +64,6 @@ public class UserDTO implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setOrderDTOList(List<OrderDTO> orderDTOlist) {
-        this.orderDTOlist = orderDTOlist;
-    }
-
-    public List<OrderDTO> getOrderDTOlist() {
-        return orderDTOlist;
     }
 
     @Override

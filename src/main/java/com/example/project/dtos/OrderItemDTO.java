@@ -11,6 +11,7 @@ public class OrderItemDTO implements Serializable {
     private Long productId; // ID do Product
     private Integer quantity;
     private Double price;
+    private ProductDTO productDTO;
 
     public OrderItemDTO() {
     }
@@ -49,6 +50,14 @@ public class OrderItemDTO implements Serializable {
     }
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public ProductDTO getProduct() {
+        return productDTO;
+    }
+
+    public void setProduct(ProductDTO productDTO) {
+        this.productDTO = productDTO;
     }
 
     @Override

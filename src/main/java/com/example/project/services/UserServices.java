@@ -1,9 +1,8 @@
 package com.example.project.services;
 
-import com.example.project.dtos.OrderDTO;
-import com.example.project.dtos.OrderItemDTO;
-import com.example.project.dtos.UserDTO;
+import com.example.project.dtos.*;
 import com.example.project.entities.Order;
+import com.example.project.entities.Product;
 import com.example.project.entities.User;
 import com.example.project.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -11,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +42,6 @@ public class UserServices {
         userDTO.setName(user.getName());
         userDTO.setPassword(user.getPassword());
         userDTO.setPhone(user.getPhone());
-        userDTO.setOrderDTOList(convertToOrderDTOList(user));
         return userDTO;
     }
 
@@ -53,22 +51,41 @@ public class UserServices {
             orderDTO.setOrderStatus(x.getOrderStatus().name());
             orderDTO.setId(x.getId());
             orderDTO.setInstant(x.getInstant());
-            orderDTO.setItems(convertToOrderItemDTOList(x));
+            orderDTO.setItems(convertToOrderItemDTOSet(x));
             return orderDTO;
         }).collect(Collectors.toList());
     }
 
-    private List<OrderItemDTO> convertToOrderItemDTOList(Order order) {
+    private Set<OrderItemDTO> convertToOrderItemDTOSet(Order order) {
         return order.getItems().stream().map(item -> {
             OrderItemDTO itemDTO = new OrderItemDTO();
-            // Obtém o id da order a partir do objeto 'order' (todos os itens pertencem a essa order)
             itemDTO.setOrderId(order.getId());
-            // Obtém o id do product a partir do item
             itemDTO.setProductId(item.getProduct().getId());
             itemDTO.setQuantity(item.getQuantity());
             itemDTO.setPrice(item.getPrice());
+
+
+            Product product = item.getProduct();
+            ProductDTO pDto = new ProductDTO();
+            pDto.setId(product.getId());
+            pDto.setName(product.getName());
+            pDto.setDescription(product.getDescription());
+            pDto.setPrice(product.getPrice());
+            pDto.setImgUrL(product.getImgUrL());
+            pDto.setCategory(convertToCategoryDTOSet(product));
+
+            itemDTO.setProduct(pDto);
             return itemDTO;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toSet());
+    }
+
+    private Set<CategoryDTO> convertToCategoryDTOSet(Product product) {
+        return product.getCategories().stream().map(cat -> {
+            CategoryDTO cDto = new CategoryDTO();
+            cDto.setId(cat.getId());
+            cDto.setName(cat.getName());
+            return cDto;
+        }).collect(Collectors.toSet());
     }
 }
 

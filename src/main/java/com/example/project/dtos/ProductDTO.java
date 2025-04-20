@@ -1,39 +1,35 @@
-package com.example.project.entities;
+package com.example.project.dtos;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
-@Table(name = "tb_product")
-public class Product implements Serializable {
+@JsonPropertyOrder({
+        "id",
+        "name",
+        "description",
+        "price",
+        "imgUrL",
+        "category",
+        "orders"
+})
+public class ProductDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private static final long SerialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
     private Double price;
     private String imgUrL;
+    private Set<CategoryDTO> category;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "tb_product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();
 
-    @OneToMany(mappedBy = "id.product")
-    private Set <OrderItem> orderItems = new HashSet<> ();
-
-    public Product() {
+    public ProductDTO() {
     }
 
-    public Product(Long id, String name, String description, Double price, String imgUrL) {
+    public ProductDTO(Long id, String name, String description, Double price, String imgUrL) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -81,31 +77,24 @@ public class Product implements Serializable {
         this.imgUrL = imgUrL;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public Set<CategoryDTO> getCategory() {
+        return category;
     }
 
-    public Set<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public Set<Order> getOrders () {
-        Set<Order> ordersSet = new HashSet<> ();
-        for (OrderItem x : orderItems) {
-            ordersSet.add(x.getOrder());
-        }
-        return ordersSet;
+    public void setCategory(Set<CategoryDTO> category) {
+        this.category = category;
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id);
+        ProductDTO orderDTO = (ProductDTO) o;
+        return Objects.equals(id, orderDTO.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id);
     }
 }

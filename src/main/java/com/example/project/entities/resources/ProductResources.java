@@ -1,6 +1,7 @@
 package com.example.project.entities.resources;
 
 
+import com.example.project.dtos.ProductDTO;
 import com.example.project.entities.Product;
 import com.example.project.services.ProductServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,18 @@ public class ProductResources {
     private ProductServices productServices;
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
-        List <Product> products = productServices.findAll();
+    public ResponseEntity<List<ProductDTO>> findAll() {
+        List <ProductDTO> productsDTO = productServices.findAll();
 
-        return ResponseEntity.ok().body(products);
+        return ResponseEntity.ok().body(productsDTO);
     }
 
     @GetMapping (value = "/{id}")
-    public ResponseEntity<Product> findById (@PathVariable long id) {
-        Product product = productServices.findById(id);
+    public ResponseEntity<ProductDTO> findById (@PathVariable long id) {
+        ProductDTO productsDTO = productServices.findById(id);
 
-        return ResponseEntity.ok().body(product);
+        return ResponseEntity.ok().body(productsDTO);
     }
+    
+    
 }
