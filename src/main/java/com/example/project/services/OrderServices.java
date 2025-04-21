@@ -44,16 +44,16 @@ public class OrderServices {
         dto.setOrderStatus(order.getOrderStatus().name());
         dto.setUserDTO(convertToUserDTO(order.getClient()));
         dto.setItems(convertToOrderItemDTOSet(order));
+        dto.setTotal(order.getTotal());
         return dto;
     }
 
     private Set<OrderItemDTO> convertToOrderItemDTOSet(Order order) {
         return order.getItems().stream().map(item -> {
             OrderItemDTO itemDTO = new OrderItemDTO();
-            itemDTO.setOrderId(order.getId());
-            itemDTO.setProductId(item.getProduct().getId());
             itemDTO.setQuantity(item.getQuantity());
             itemDTO.setPrice(item.getPrice());
+            itemDTO.setSubTotal(item.getSubTotal());
 
             Product product = item.getProduct();
             ProductDTO pDto = new ProductDTO();

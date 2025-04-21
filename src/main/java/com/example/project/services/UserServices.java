@@ -59,8 +59,6 @@ public class UserServices {
     private Set<OrderItemDTO> convertToOrderItemDTOSet(Order order) {
         return order.getItems().stream().map(item -> {
             OrderItemDTO itemDTO = new OrderItemDTO();
-            itemDTO.setOrderId(order.getId());
-            itemDTO.setProductId(item.getProduct().getId());
             itemDTO.setQuantity(item.getQuantity());
             itemDTO.setPrice(item.getPrice());
 

@@ -12,7 +12,8 @@ import java.util.Objects;
         "instant",
         "orderStatus",
         "user",
-        "item"
+        "item",
+        "total"
 })
 public class OrderDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -20,6 +21,7 @@ public class OrderDTO implements Serializable {
     private Long id;
     private Instant instant;
     private String orderStatus;
+    private Double total;
     private UserDTO userDTO;
     private Set<OrderItemDTO> items;
 
@@ -55,6 +57,14 @@ public class OrderDTO implements Serializable {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     public UserDTO getUser() {

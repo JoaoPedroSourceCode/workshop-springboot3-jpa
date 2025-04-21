@@ -1,5 +1,6 @@
 package com.example.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ public class Payment implements Serializable {
     private Long id;
     private Instant instant;
 
+    @JsonIgnore
     @OneToOne
     @MapsId
     private Order order;
