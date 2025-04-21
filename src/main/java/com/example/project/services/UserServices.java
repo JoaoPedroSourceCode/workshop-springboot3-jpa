@@ -34,6 +34,10 @@ public class UserServices {
         return convertToUserDTO(obj);
     }
 
+    public User insertUser (User obj) {
+        return userRepository.save(obj);
+    }
+
 
     private UserDTO convertToUserDTO (User user) {
         UserDTO userDTO = new UserDTO();
