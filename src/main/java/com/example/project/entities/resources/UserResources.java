@@ -7,6 +7,7 @@ import com.example.project.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,23 +27,27 @@ public class UserResources {
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
-        List <UserDTO> usersDTO = userServices.findAll();
+        List<UserDTO> usersDTO = userServices.findAll();
         return ResponseEntity.ok().body(usersDTO);
     }
 
-    @GetMapping (value = "/{id}")
-    public ResponseEntity<UserDTO> findById (@PathVariable long id) {
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> findById(@PathVariable long id) {
         UserDTO userDTO = userServices.findById(id);
         return ResponseEntity.ok().body(userDTO);
     }
 
     @PostMapping
-    public ResponseEntity<User> insert (@RequestBody User obj) {
+    public ResponseEntity<User> insert(@RequestBody User obj) {
         obj = userServices.insertUser(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
-
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id) {
+        userServices.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }
