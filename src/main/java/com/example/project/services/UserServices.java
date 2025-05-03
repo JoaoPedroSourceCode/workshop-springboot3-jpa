@@ -34,6 +34,20 @@ public class UserServices {
         return convertToUserDTO(obj);
     }
 
+    @Transactional
+    public User update (Long id, User obj){
+        User entity = userRepository.getReferenceById(id);
+        updateData(entity, obj);
+        return userRepository.save(entity);
+
+    }
+
+    public void updateData (User entity, User obj) {
+        entity.setName(obj.getName());
+        entity.setEmail(obj.getEmail());
+        entity.setPhone(obj.getPhone());
+    }
+
     public User insertUser (User obj) {
         return userRepository.save(obj);
     }
@@ -42,7 +56,7 @@ public class UserServices {
         userRepository.deleteById(id);
     }
 
-    private UserDTO convertToUserDTO (User user) {
+    public UserDTO convertToUserDTO (User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(user.getEmail());
         userDTO.setId(user.getId());
