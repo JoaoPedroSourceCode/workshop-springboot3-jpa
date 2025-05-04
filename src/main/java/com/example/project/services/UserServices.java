@@ -5,6 +5,7 @@ import com.example.project.entities.Order;
 import com.example.project.entities.Product;
 import com.example.project.entities.User;
 import com.example.project.repositories.UserRepository;
+import com.example.project.services.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class UserServices {
     @Transactional
     public UserDTO findById(Long id) {
         User obj = userRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("User not found"));
+                orElseThrow(() -> new ResourceNotFoundException(id));
         obj.getOrders().size();
 
         return convertToUserDTO(obj);
