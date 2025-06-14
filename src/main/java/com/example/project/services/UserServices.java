@@ -7,6 +7,7 @@ import com.example.project.entities.User;
 import com.example.project.repositories.UserRepository;
 import com.example.project.services.exceptions.DataBaseException;
 import com.example.project.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,9 +42,15 @@ public class UserServices {
 
     @Transactional
     public User update(Long id, User obj) {
-        User entity = userRepository.getReferenceById(id);
-        updateData(entity, obj);
-        return userRepository.save(entity);
+
+        try {
+            User entity = userRepository.getReferenceById(id);
+            updateData(entity, obj);
+            return userRepository.save(entity);
+
+        } catch (EntityNotFoundException ee) {
+            throw new ResourceNotFoundException(id);
+        }
 
     }
 
@@ -56,7 +63,6 @@ public class UserServices {
     public User insertUser(User obj) {
         return userRepository.save(obj);
     }
-
 
     @Transactional
     public void deleteUser(Long id) {
