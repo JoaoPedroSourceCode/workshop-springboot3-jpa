@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
-
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 import java.net.URI;
 import java.util.List;
@@ -53,8 +53,8 @@ public class UserResources {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping (value = "/{id}")
-    public ResponseEntity <UserDTO> update (@PathVariable long id, @RequestBody User obj) {
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable long id, @RequestBody User obj) {
         obj = userServices.update(id, obj);
         return ResponseEntity.ok().body(userServices.convertToUserDTO(obj));
     }

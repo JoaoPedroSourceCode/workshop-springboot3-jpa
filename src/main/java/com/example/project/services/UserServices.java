@@ -5,9 +5,14 @@ import com.example.project.entities.Order;
 import com.example.project.entities.Product;
 import com.example.project.entities.User;
 import com.example.project.repositories.UserRepository;
+import com.example.project.services.exceptions.DataBaseException;
 import com.example.project.services.exceptions.ResourceNotFoundException;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.PersistenceException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +24,6 @@ public class UserServices {
 
     @Autowired
     private UserRepository userRepository;
-
 
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream().map(this::convertToUserDTO).collect(Collectors.toList());
@@ -36,28 +40,59 @@ public class UserServices {
     }
 
     @Transactional
-    public User update (Long id, User obj){
+    public User update(Long id, User obj) {
         User entity = userRepository.getReferenceById(id);
         updateData(entity, obj);
         return userRepository.save(entity);
 
     }
 
-    public void updateData (User entity, User obj) {
+    public void updateData(User entity, User obj) {
         entity.setName(obj.getName());
         entity.setEmail(obj.getEmail());
         entity.setPhone(obj.getPhone());
     }
 
-    public User insertUser (User obj) {
+    public User insertUser(User obj) {
         return userRepository.save(obj);
     }
 
-    public void deleteUser (Long id) {
-        userRepository.deleteById(id);
+
+    @Transactional
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException(id);
+        }
+
+        try {
+            userRepository.deleteById(id);
+            userRepository.flush(); // força execução imediata do DELETE
+
+        } catch (DataIntegrityViolationException di) {
+            String detail = String.format(
+                    "Cannot delete User with id=%d because there are related orders or other data.",
+                    id
+            );
+            throw new DataBaseException(detail);
+
+        } catch (ConstraintViolationException hcv) {
+            String detail = String.format(
+                    "Cannot delete User with id=%d because there are related orders or other data (Hibernate).",
+                    id
+            );
+            throw new DataBaseException(detail);
+
+        } catch (PersistenceException pe) {
+            String detail = String.format(
+                    "Cannot delete User with id=%d due to a database persistence error.",
+                    id
+            );
+            throw new DataBaseException(detail);
+        }
     }
 
-    public UserDTO convertToUserDTO (User user) {
+
+    public UserDTO convertToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(user.getEmail());
         userDTO.setId(user.getId());
@@ -83,7 +118,6 @@ public class UserServices {
             OrderItemDTO itemDTO = new OrderItemDTO();
             itemDTO.setQuantity(item.getQuantity());
             itemDTO.setPrice(item.getPrice());
-
 
             Product product = item.getProduct();
             ProductDTO pDto = new ProductDTO();

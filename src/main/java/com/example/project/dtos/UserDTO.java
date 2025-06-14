@@ -1,7 +1,6 @@
 package com.example.project.dtos;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class UserDTO implements Serializable {
